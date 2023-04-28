@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 '''contains the unlockall method'''
 
+
 def canUnlockAll(boxes):
     '''determines if all the boxes can be opened'''
     n = len(boxes)
