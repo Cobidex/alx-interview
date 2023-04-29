@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 '''contains function for pascals triangle'''
 
+
 def pascal_triangle(n):
     '''derive the pascals triangle'''
     if n <= 0:
@@ -15,4 +16,3 @@ def pascal_triangle(n):
         triangle.append(row)
 
     return triangle
-
