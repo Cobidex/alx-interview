@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+'''
+contains the print_stats
+'''
 import sys
 
 TOTAL_LINES_TO_PRINT_STATS = 10
@@ -7,13 +10,18 @@ status_code_counts = {c: 0 for c in status_codes}
 total_file_size = 0
 line_count = 0
 
+
 def print_stats():
+    '''
+    reads stdin line by line and computes metrics
+    '''
     global status_code_counts, total_file_size, line_count
     print("File size: {}".format(total_file_size))
     for c in sorted(status_codes):
         if status_code_counts[c] > 0:
             print("{}: {}".format(c, status_code_counts[c]))
     line_count = 0
+
 
 try:
     for line in sys.stdin:
@@ -26,7 +34,7 @@ try:
             total_file_size += file_size
             status_code_counts[status_code] += 1
             line_count += 1
-        except:
+        except TypeError:
             pass
         if line_count == TOTAL_LINES_TO_PRINT_STATS:
             print_stats()
