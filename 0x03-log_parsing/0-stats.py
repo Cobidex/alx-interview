@@ -1,43 +1,50 @@
 #!/usr/bin/python3
-'''
-contains the print_stats
-'''
+"""
+Log parsing
+"""
+
 import sys
-
-TOTAL_LINES_TO_PRINT_STATS = 10
-status_codes = [200, 301, 400, 401, 403, 404, 405, 500]
-status_code_counts = {c: 0 for c in status_codes}
-total_file_size = 0
-line_count = 0
+import re
+from collections import defaultdict
 
 
-def print_stats():
-    '''
-    reads stdin line by line and computes metrics
-    '''
-    global status_code_counts, total_file_size, line_count
-    print("File size: {}".format(total_file_size))
-    for c in sorted(status_codes):
-        if status_code_counts[c] > 0:
-            print("{}: {}".format(c, status_code_counts[c]))
-    line_count = 0
+def display_statistics(log: dict) -> None:
+    """
+    Display statistics about log file
+    """
+    print(f"File size: {log['file_size']} bytes")
+    for code, count in sorted(log['code_frequency'].items()):
+        if count:
+            print(f"{code}: {count}")
 
 
-try:
-    for line in sys.stdin:
-        try:
-            parts = line.split()
-            ip_address = parts[0]
-            date_str = parts[3][1:]
-            status_code = int(parts[8])
-            file_size = int(parts[9])
-            total_file_size += file_size
-            status_code_counts[status_code] += 1
-            line_count += 1
-        except TypeError:
-            pass
-        if line_count == TOTAL_LINES_TO_PRINT_STATS:
-            print_stats()
-except KeyboardInterrupt:
-    print_stats()
-    sys.exit(0)
+if __name__ == "__main__":
+    # Define regular expression pattern to match log entries
+    log_entry_pattern = re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - '
+                                   r'\[(?P<timestamp>.+)\] "(?P<request>.+)" '
+                                   r'(?P<status_code>\d{3}) (?P<file_size>\d+)')
+
+    # Initialize variables
+    log = defaultdict(int)
+
+    try:
+        for line_num, line in enumerate(sys.stdin, start=1):
+            line = line.strip()
+            match = log_entry_pattern.fullmatch(line)
+            if match:
+                log["file_size"] += int(match.group('file_size'))
+
+                status_code = match.group('status_code')
+                if status_code.isdecimal():
+                    log['code_frequency'][status_code] += 1
+
+                if line_num % 10 == 0:
+                    display_statistics(log)
+
+        # Display statistics for remaining lines
+        display_statistics(log)
+
+    except KeyboardInterrupt:
+        # If user presses CTRL+C, print statistics and exit
+        display_statistics(log)
+        sys.exit(0)
