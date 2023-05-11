@@ -1,50 +1,50 @@
 #!/usr/bin/python3
 """
-Log parsing
+This script parses log files to extract useful information such as file size and frequency of HTTP response codes.
 """
 
 import sys
 import re
-from collections import defaultdict
 
 
-def display_statistics(log: dict) -> None:
+def show_statistics(log_data: dict) -> None:
     """
-    Display statistics about log file
+    Helper function to display statistics
     """
-    print(f"File size: {log['file_size']} bytes")
-    for code, count in sorted(log['code_frequency'].items()):
-        if count:
-            print(f"{code}: {count}")
+    print("File size: {}".format(log_data["file_size"]))
+    for code in sorted(log_data["code_frequency"]):
+        if log_data["code_frequency"][code]:
+            print("{}: {}".format(code, log_data["code_frequency"][code]))
 
 
 if __name__ == "__main__":
-    # Define regular expression pattern to match log entries
-    log_entry_pattern = re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - '
-                                   r'\[(?P<timestamp>.+)\] "(?P<request>.+)" '
-                                   r'(?P<status_code>\d{3}) (?P<file_size>\d+)')
+    regex = re.compile(
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\] "GET /projects/260 HTTP/1.1" (.{3}) (\d+)')  # nopep8
 
-    # Initialize variables
-    log = defaultdict(int)
+    line_count = 0
+    log_data = {}
+    log_data["file_size"] = 0
+    log_data["code_frequency"] = {
+        str(code): 0 for code in [
+            200, 301, 400, 401, 403, 404, 405, 500]}
 
     try:
-        for line_num, line in enumerate(sys.stdin, start=1):
+        for line in sys.stdin:
             line = line.strip()
-            match = log_entry_pattern.fullmatch(line)
+            match = regex.fullmatch(line)
             if match:
-                log["file_size"] += int(match.group('file_size'))
+                line_count += 1
+                code = match.group(1)
+                file_size = int(match.group(2))
 
-                status_code = match.group('status_code')
-                if status_code.isdecimal():
-                    log['code_frequency'][status_code] += 1
+                # File size
+                log_data["file_size"] += file_size
 
-                if line_num % 10 == 0:
-                    display_statistics(log)
+                # status code
+                if code.isdecimal():
+                    log_data["code_frequency"][code] += 1
 
-        # Display statistics for remaining lines
-        display_statistics(log)
-
-    except KeyboardInterrupt:
-        # If user presses CTRL+C, print statistics and exit
-        display_statistics(log)
-        sys.exit(0)
+                if line_count % 10 == 0:
+                    show_statistics(log_data)
+    finally:
+        show_statistics(log_data)
