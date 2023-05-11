@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-This script parses log files to extract useful information such as file size and frequency of HTTP response codes.
+This script parses log files to extract useful
+information such as file size and frequency of HTTP response codes.
 """
 
 import sys
