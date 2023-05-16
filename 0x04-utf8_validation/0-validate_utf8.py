@@ -7,6 +7,9 @@ This module contains the validUTF8 method
 def validUTF8(data):
     '''
     determines if a given data set represents a valid UTF-8 encoding
+    args:
+        @data: a list of integers
+    returns boolean
     '''
     cont_bytes = 0
     for byte in data:
