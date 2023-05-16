@@ -2,7 +2,6 @@
 '''
 This module contains the validUTF8 method
 '''
-from typing import List
 
 
 def validUTF8(data):
