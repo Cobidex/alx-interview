@@ -2,13 +2,14 @@
 '''
 This module contains the validUTF8 method
 '''
+from typing import List
 
 
-def validUTF8(data):
+def validUTF8(data: List[int]) -> bool:
     '''
     determines if a given data set represents a valid UTF-8 encoding
     '''
-    cont_bytes = 0
+    cont_bytes: int = 0
     for byte in data:
         if cont_bytes:
             if byte >> 6 != 0b10:
