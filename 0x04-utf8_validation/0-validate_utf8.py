@@ -8,8 +8,7 @@ def validUTF8(data):
     '''
     determines if a given data set represents a valid UTF-8 encoding
     '''
-    cont_bytes: int = 0
-    store_init_cont_bytes: int = cont_bytes
+    cont_bytes = 0
     for byte in data:
         if cont_bytes:
             if byte >> 6 != 0b10:
