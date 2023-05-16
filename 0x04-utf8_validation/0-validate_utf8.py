@@ -5,10 +5,12 @@ This module contains the validUTF8 method
 from typing import List
 
 
-def validUTF8(data: List[int]) -> bool:
+def validUTF8(data):
     '''
     determines if a given data set represents a valid UTF-8 encoding
     '''
+    if type(data) != list:
+        return False
     cont_bytes: int = 0
     for byte in data:
         if cont_bytes:
