@@ -1,82 +1,57 @@
 #!/usr/bin/python3
-'''
-contains the queens methods
-'''
-
+"""Solving N Queens with Backtracking"""
 import sys
 
 
-def is_safe(board, row, col):
-    # Check if a queen can be placed at board[row][col]
-
-    # Check left side of the current row
-    for i in range(col):
-        if board[row][i] == 1:
-            return False
-
-    # Check upper diagonal on the left side
-    i = row
-    j = col
-    while i >= 0 and j >= 0:
-        if board[i][j] == 1:
-            return False
-        i -= 1
-        j -= 1
-
-    # Check lower diagonal on the left side
-    i = row
-    j = col
-    while i < N and j >= 0:
-        if board[i][j] == 1:
-            return False
-        i += 1
-        j -= 1
-
-    return True
-
-
-def solve_nqueens(board, col):
-    # Base case: All queens have been placed
-    if col >= N:
-        solutions.append(board.copy())
-        return
-
-    # Recursive case: Try placing the queen in each row of the current column
-    for row in range(N):
-        if is_safe(board, row, col):
-            board[row][col] = 1
-            solve_nqueens(board, col + 1)
-            board[row][col] = 0
+def place_queens(n, row, board):
+    """
+    Method: place_queens - place n queens
+            on an n by n board so that
+            no queens are attacking each other.
+    Parameters:
+        - n: An integer that sets the board size and the number of queens.
+        - row: The current row being considered for queen placement.
+        - board: The current board configuration with queen placements.
+    Return:
+        All possible solutions to queen placement in the form of a
+        list of lists.
+    """
+    for col in range(n):
+        is_attacked = False
+        for queen in board:
+            if col == queen[1]:
+                is_attacked = True
+                break
+            if row - col == queen[0] - queen[1]:
+                is_attacked = True
+                break
+            if col - queen[1] == queen[0] - row:
+                is_attacked = True
+                break
+        if not is_attacked:
+            board.append([row, col])
+            if row != n - 1:
+                place_queens(n, row + 1, board)
+            else:
+                print(board)
+            del board[-1]
 
 
-def print_solutions(solutions):
-    for solution in solutions:
-        print(solution)
-
-
-# Main program
-if __name__ == "__main__":
-    # Check if the correct number of arguments is provided
+def main():
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
-
     try:
-        N = int(sys.argv[1])
-    except ValueError:
-        print("N must be a number")
+        n = int(sys.argv[1])
+    except Exception:
+        print('N must be a number')
         sys.exit(1)
-
-    if N < 4:
+    if n < 4:
         print("N must be at least 4")
         sys.exit(1)
 
-    # Initialize an empty chessboard
-    board = [[0 for _ in range(N)] for _ in range(N)]
-    solutions = []
+    place_queens(n, 0, [])
 
-    # Solve the N Queens problem
-    solve_nqueens(board, 0)
 
-    # Print the solutions
-    print_solutions(solutions)
+if __name__ == '__main__':
+    main()
