@@ -6,4 +6,4 @@ the value of the coin  will always be an integer, and the assumption is that the
 
 coins are passed in as a list to the function as its first argument while the amount is the second argument
 
-The goal is for the runtime to be in order of Olog(nlogn).
+The goal is for the runtime to be in order of O(nlog(n)).
