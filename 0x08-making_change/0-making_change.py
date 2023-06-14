@@ -25,7 +25,6 @@ def makeChange(coins: List[int], total: int) -> int:
     if total <= 0:
         return 0
 
-    index: int = 0
     length: int = len(coins)
     coins.sort(reverse=True)
     utils: Dict = {
