@@ -18,7 +18,7 @@ def recurse_make_change(coins: List[int], utils: Dict) -> int:
         return recurse_make_change(coins, utils)
 
 
-def make_change(coins: List[int], total: int) -> int:
+def makeChange(coins: List[int], total: int) -> int:
     """Determine the fewest number of coins needed to meet a given amount"""
     if total <= 0:
         return 0
