@@ -1,37 +1,35 @@
 #!/usr/bin/python3
-""" contains the makeChange function """
+"""Contains the make_change function"""
 from typing import List, Dict
 
 
-def recurseMakeChange(coins: List[int], utils: Dict) -> int:
-    """ recursively determine fewest number of coins """
+def recurse_make_change(coins: List[int], utils: Dict) -> int:
+    """Recursively determine the fewest number of coins"""
     if utils['index'] >= utils['length'] and utils['remainder'] > 0:
         return -1
     elif utils['index'] == utils['length']:
-        return utils['numberCoins']
+        return utils['number_coins']
     elif coins[utils['index']] > utils['remainder']:
         utils['index'] += 1
-        return recurseMakeChange(coins, utils)
+        return recurse_make_change(coins, utils)
     else:
-        utils['numberCoins'] += utils['remainder'] // coins[utils['index']]
+        utils['number_coins'] += utils['remainder'] // coins[utils['index']]
         utils['remainder'] = utils['remainder'] % coins[utils['index']]
-        return recurseMakeChange(coins, utils)
+        return recurse_make_change(coins, utils)
 
 
-def makeChange(coins: List[int], total: int) -> int:
-    """determine fewest number of coin
-    needed to meet a given amount
-    """
+def make_change(coins: List[int], total: int) -> int:
+    """Determine the fewest number of coins needed to meet a given amount"""
     if total <= 0:
         return 0
 
     length: int = len(coins)
     coins.sort(reverse=True)
     utils: Dict = {
-            'remainder': total,
-            'length': length,
-            'index': 0,
-            'numberCoins': 0
-            }
+        'remainder': total,
+        'length': length,
+        'index': 0,
+        'number_coins': 0
+    }
 
-    return recurseMakeChange(coins, utils)
+    return recurse_make_change(coins, utils)
