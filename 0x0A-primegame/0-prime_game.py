@@ -1,8 +1,4 @@
 #!/usr/bin/python3
-'''
-contains the isWinner function
-'''
-
 
 def isWinner(x, nums):
     if not nums or x < 1:
