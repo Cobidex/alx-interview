@@ -5,7 +5,7 @@ contains the isWinner function
 
 
 def isWinner(num_rounds, nums):
-    """Function that performs prime game"""
+    """function for the game"""
     if not nums or num_rounds < 1:
         return None
     max_num = max(nums)
