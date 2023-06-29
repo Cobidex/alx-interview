@@ -1,32 +1,31 @@
 #!/usr/bin/python3
+"""
+contains the isWinner function
+"""
 
-def isWinner(x, nums):
-    if not nums or x < 1:
+
+def isWinner(num_rounds, nums):
+    """Function that performs prime game"""
+    if not nums or num_rounds < 1:
         return None
-
     max_num = max(nums)
-    primes = [True] * (max_num + 1)
-    primes[0] = primes[1] = False
-
-    p = 2
-    while p * p <= max_num:
-        if primes[p]:
-            for i in range(p * p, max_num + 1, p):
-                primes[i] = False
-        p += 1
-
-    wins = {'Maria': 0, 'Ben': 0}
-
+    prime_filter = [True for _ in range(max(max_num + 1, 2))]
+    for i in range(2, int(pow(max_num, 0.5)) + 1):
+        if not prime_filter[i]:
+            continue
+        for j in range(i * i, max_num + 1, i):
+            prime_filter[j] = False
+    prime_filter[0] = prime_filter[1] = False
+    primes_count = 0
+    for i in range(len(prime_filter)):
+        if prime_filter[i]:
+            primes_count += 1
+        prime_filter[i] = primes_count
+    player1_count = 0
     for n in nums:
-        count = sum(primes[2:n+1])
-        if count % 2 == 0:
-            wins['Ben'] += 1
-        else:
-            wins['Maria'] += 1
-
-    if wins['Maria'] > wins['Ben']:
-        return 'Maria'
-    elif wins['Maria'] < wins['Ben']:
-        return 'Ben'
-    else:
+        player1_count += prime_filter[n] % 2 == 1
+    if player1_count * 2 == len(nums):
         return None
+    if player1_count * 2 > len(nums):
+        return "Maria"
+    return "Ben"
