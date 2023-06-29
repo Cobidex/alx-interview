@@ -8,7 +8,7 @@ def isWinner(num_rounds, nums):
     """performs prime game"""
     if not nums or num_rounds < 1:
         return None
-    
+
     max_num = max(nums)
     prime_filter = [True for _ in range(max(max_num + 1, 2))]
     prime_filter[0] = prime_filter[1] = False
@@ -17,7 +17,7 @@ def isWinner(num_rounds, nums):
         if prime_filter[i]:
             for j in range(i * i, max_num + 1, i):
                 prime_filter[j] = False
-    
+
     primes_count = [0] * len(prime_filter)
     count = 0
     for i in range(len(prime_filter)):
