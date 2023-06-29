@@ -22,8 +22,8 @@ def isWinner(num_rounds, nums):
             primes_count += 1
         prime_filter[i] = primes_count
     player1_count = 0
-    for n in nums:
-        player1_count += prime_filter[n] % 2 == 1
+    for k in nums:
+        player1_count += prime_filter[k] % 2 == 1
     if player1_count * 2 == len(nums):
         return None
     if player1_count * 2 > len(nums):
